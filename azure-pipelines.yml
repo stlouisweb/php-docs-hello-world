@@ -37,6 +37,7 @@ jobs:
     #   inputs:
     #     PathtoPublish: $(build.artifactstagingdirectory)
 
+
     - task: PublishPipelineArtifact@1
       inputs:
         targetPath: '$(build.artifactstagingdirectory)'
@@ -53,6 +54,10 @@ jobs:
     runOnce:
       deploy:
         steps:
+        - task: DownloadPipelineArtifact@2
+          inputs:
+            buildType: 'current'
+            targetPath: '$(Pipeline.Workspace)'
         - task: CopyFilesOverSSH@0
           inputs:
             sshEndpoint: 'xdevsite.com'
