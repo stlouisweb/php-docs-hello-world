@@ -3,6 +3,10 @@
 # Add steps that run tests, save build artifacts, deploy, and more:
 # https://docs.microsoft.com/azure/devops/pipelines/languages/php
 
+variables:
+  serviceConnectionToXdevsite: xdevsite.com
+  appName: PHP Demo
+
 trigger:
 - master
 
@@ -22,5 +26,23 @@ steps:
     php -version
   displayName: 'Use PHP version $(phpVersion)'
 
-- script: composer install --no-interaction --prefer-dist
-  displayName: 'composer install'
+# - script: composer install --no-interaction --prefer-dist
+#   displayName: 'composer install'
+
+- task: ArchiveFiles@1
+  displayName: Archive files
+  inputs:
+    rootFolder: $(System.DefaultWorkingDirectory)
+    includeRootFolder: false
+    archiveType: zip
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact
+  inputs:
+    PathtoPublish: $(build.artifactstagingdirectory)
+
+- task: CopyFilesOverSSH@0
+  inputs:
+    sshEndpoint: 'xdevsite.com'
+    sourceFolder: '$(build.artifactstagingdirectory)/**/*.zip'
+    contents: '**'
