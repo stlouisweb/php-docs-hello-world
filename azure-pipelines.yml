@@ -6,17 +6,16 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
-
 variables:
   phpVersion: 7.2
   serviceConnectionToXdevsite: xdevsite.com
   appName: PHP Demo
 
 jobs:
-- build: BuildJob
-  displayName: Build job  
+- job: BuildJob
+  displayName: Build job 
+  pool:
+    vmImage: 'ubuntu-latest' 
   steps:
     - script: |
         sudo update-alternatives --set php /usr/bin/php$(phpVersion)
@@ -37,6 +36,8 @@ jobs:
         includeRootFolder: false
         archiveType: zip
 - deployment: deployjob        # instead of job keyword, use deployment keyword
+  pool:
+    vmImage: 'ubuntu-latest'
   environment: develop
   strategy:
     runOnce:
