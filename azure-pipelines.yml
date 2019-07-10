@@ -25,6 +25,17 @@ jobs:
         sudo update-alternatives --set phar.phar /usr/bin/phar.phar$(phpVersion)
         php -version
       displayName: 'Use PHP version $(phpVersion)'
+    - task: ArchiveFiles@1
+      displayName: Archive files
+      inputs:
+        rootFolder: $(System.DefaultWorkingDirectory)
+        includeRootFolder: false
+        archiveType: zip
+
+    - task: PublishBuildArtifacts@1
+      displayName: Publish Artifact
+      inputs:
+        PathtoPublish: $(build.artifactstagingdirectory)
 
 # - script: composer install --no-interaction --prefer-dist
 #   displayName: 'composer install'
@@ -37,18 +48,6 @@ jobs:
     runOnce:
       deploy:
         steps:
-        - task: ArchiveFiles@1
-          displayName: Archive files
-          inputs:
-            rootFolder: $(System.DefaultWorkingDirectory)
-            includeRootFolder: false
-            archiveType: zip
-
-        - task: PublishBuildArtifacts@1
-          displayName: Publish Artifact
-          inputs:
-            PathtoPublish: $(build.artifactstagingdirectory)
-
         - task: CopyFilesOverSSH@0
           inputs:
             sshEndpoint: 'xdevsite.com'
