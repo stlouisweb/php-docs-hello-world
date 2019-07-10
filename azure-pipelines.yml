@@ -32,10 +32,15 @@ jobs:
         includeRootFolder: false
         archiveType: zip
 
-    - task: PublishBuildArtifacts@1
-      displayName: Publish Artifact
+    # - task: PublishBuildArtifacts@1
+    #   displayName: Publish Artifact
+    #   inputs:
+    #     PathtoPublish: $(build.artifactstagingdirectory)
+
+    - task: PublishPipelineArtifact@1
       inputs:
-        PathtoPublish: $(build.artifactstagingdirectory)
+        targetPath: '$(build.artifactstagingdirectory)'
+        artifact: 'Webapp'
 
 # - script: composer install --no-interaction --prefer-dist
 #   displayName: 'composer install'
@@ -51,5 +56,5 @@ jobs:
         - task: CopyFilesOverSSH@0
           inputs:
             sshEndpoint: 'xdevsite.com'
-            sourceFolder: '$(build.artifactstagingdirectory)/**/*.zip'
+            sourceFolder: '$(Pipeline.Workspace)/Webapp'
             contents: '**'
