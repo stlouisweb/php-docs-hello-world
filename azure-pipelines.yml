@@ -46,20 +46,20 @@ jobs:
 # - script: composer install --no-interaction --prefer-dist
 #   displayName: 'composer install'
 
-- deployment: deployjob        # instead of job keyword, use deployment keyword
-  pool:
-    vmImage: 'ubuntu-latest'
-  environment: develop
-  strategy:
-    runOnce:
-      deploy:
-        steps:
-        - task: DownloadPipelineArtifact@2
-          inputs:
-            buildType: 'current'
-            targetPath: '$(Pipeline.Workspace)'
-        - task: CopyFilesOverSSH@0
-          inputs:
-            sshEndpoint: 'xdevsite.com'
-            sourceFolder: '$(Pipeline.Workspace)/Webapp'
-            contents: '**'
+# - deployment: deployjob        # instead of job keyword, use deployment keyword
+#   pool:
+#     vmImage: 'ubuntu-latest'
+#   environment: develop
+#   strategy:
+#     runOnce:
+#       deploy:
+#         steps:
+#         - task: DownloadPipelineArtifact@2
+#           inputs:
+#             buildType: 'current'
+#             targetPath: '$(Pipeline.Workspace)'
+#         - task: CopyFilesOverSSH@0
+#           inputs:
+#             sshEndpoint: 'xdevsite.com'
+#             sourceFolder: '$(Pipeline.Workspace)/Webapp'
+#             contents: '**'
