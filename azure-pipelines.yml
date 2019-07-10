@@ -29,12 +29,6 @@ jobs:
 # - script: composer install --no-interaction --prefer-dist
 #   displayName: 'composer install'
 
-    - task: ArchiveFiles@1
-      displayName: Archive files
-      inputs:
-        rootFolder: $(System.DefaultWorkingDirectory)
-        includeRootFolder: false
-        archiveType: zip
 - deployment: deployjob        # instead of job keyword, use deployment keyword
   pool:
     vmImage: 'ubuntu-latest'
@@ -47,6 +41,13 @@ jobs:
           displayName: Publish Artifact
           inputs:
             PathtoPublish: $(build.artifactstagingdirectory)
+        
+        - task: ArchiveFiles@1
+          displayName: Archive files
+          inputs:
+            rootFolder: $(System.DefaultWorkingDirectory)
+            includeRootFolder: false
+            archiveType: zip
 
         - task: CopyFilesOverSSH@0
           inputs:
